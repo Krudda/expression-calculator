@@ -4,9 +4,23 @@ function eval() {
 }
 // "2+2"
 function expressionCalculator(expr) {
-    console.log(expr);
+    // console.log(expr);
+   
+    let countOpen = expr.match(/[(]/g) || 0;
+    countOpen !== 0 ?  countOpen = countOpen.length : 0;
 
-    let exprArr = expr
+    let countClose = expr.match(/[)]/g) || 0;
+    countClose !== 0 ?  countClose = countClose.length : 0;
+
+
+    if (countOpen !== countClose) {    
+        throw new Error('ExpressionError: Brackets must be paired.')
+    }
+
+    let reg = /\s/g;
+     reg.test(expr) ? testExpr = expr : testExpr = expr.split('').join(' ').toString();
+
+    let exprArr = testExpr
        .trim()
        .replace(/\s{2,}/g, ' ')
        .split(' ');
@@ -73,9 +87,14 @@ function expressionCalculator(expr) {
                 // console.log('steck: ', steck);
             }
             else if ( priority[steck[steck.length - 1]] >= priority[element]) {
-                // console.log('yoyoyo');
+                // console.log('element: ', element);
+                // console.log('Равный или меньший приоритет! Из стека кидаю на выход, текущий сравниваю с получившимся верхним в стеке');
                 let tmp = steck.pop();
                 exitArr.push(tmp);
+                if ( priority[steck[steck.length - 1]] >= priority[element] ) {
+                    let tmp = steck.pop();
+                    exitArr.push(tmp);
+                }
                 steck.push(element);
                 // console.log('exitArr: ', exitArr);
                 // console.log('steck: ', steck);
